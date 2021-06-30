@@ -1,0 +1,26 @@
+language: generic
+sudo: required
+
+services: 
+  - docker
+
+before_install:
+  - docker build kellyDouglass/react-test2 -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run kellydouglass/react-test2 npm test -- --coverage
+
+after_success:
+  - docker build -t kellydouglass/multi-client2 ./client
+  - docker build -t kellydouglass/multi-nginx2 ./nginx
+  - docker build -t kellydouglass/multi-server2 ./server
+  - docker build -t kellydouglass/multi-worker2 ./worker
+  #Login to Docker CLI
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  # Take the images and push to docker hub
+  - docker push kellydouglass/multi-client2 
+  - docker push kellydouglass/multi-nginx2 
+  - docker push kellydouglass/multi-server2 
+  - docker push kellydouglass/multi-worker2
+
+
