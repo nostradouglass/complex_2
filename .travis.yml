@@ -5,7 +5,7 @@ services:
   - docker
 
 before_install:
-  - docker build kellyDouglass/react-test2 -f ./client/Dockerfile.dev ./client
+  - docker build -t kellyDouglass/react-test2 -f ./client/Dockerfile.dev ./client
 
 script:
   - docker run kellydouglass/react-test2 npm test -- --coverage
